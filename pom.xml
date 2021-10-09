@@ -5,6 +5,9 @@
     <modules>
         <module>singleton</module>
         <module>simple-factory</module>
+        <module>factory-method</module>
+        <module>abstract-factory</module>
+        <module>thread-rpg-battle</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
