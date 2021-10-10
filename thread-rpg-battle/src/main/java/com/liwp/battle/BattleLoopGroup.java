@@ -1,5 +1,6 @@
 package com.liwp.battle.actuator;
 
+import com.liwp.battle.BaseBattle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -14,7 +15,7 @@ public class BattleLoopGroup implements Runnable {
 
     private volatile boolean stop;
 
-    private BattleLoopGroup() {
+    public BattleLoopGroup() {
         loopGuard = new LoopThread(this, "loopGuard");
     }
 
@@ -37,7 +38,7 @@ public class BattleLoopGroup implements Runnable {
             if (stop) {
                 break;
             }
-            runFunc(loop -> loop.checkLoopTimeOut());
+            //runFunc(loop -> loop.checkLoopTimeOut());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -54,5 +55,9 @@ public class BattleLoopGroup implements Runnable {
 
     private BattleLoop getLoop(int battleId) {
         return loops[battleId % loops.length];
+    }
+
+    public void put(BaseBattle battle) {
+        getLoop(battle.battleId).put(battle);
     }
 }

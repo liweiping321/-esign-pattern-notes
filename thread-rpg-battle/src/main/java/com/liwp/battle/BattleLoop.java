@@ -11,15 +11,13 @@ public class BattleLoop implements Runnable {
 
     private static final Logger LOGGER = LogManager.getLogger(BattleLoopGroup.class);
 
-    private static final long STEP_TIME = 42;
+    public static final long STEP_TIME = 42;
 
     private static final long LOOP_TIME_OUT = 5000l;
 
-    private Map<Long, BaseBattle> battleMap = new ConcurrentSkipListMap<>();
+    private Map<Integer, BaseBattle> battleMap = new ConcurrentSkipListMap<>();
 
     private LoopThread worker;
-
-    private final DelayedQueue queue;
 
     private long lastExecuteTime;
 
@@ -29,7 +27,6 @@ public class BattleLoop implements Runnable {
 
     public BattleLoop(int loopId) {
         this.loopId = loopId;
-        queue = new DelayedQueue();
         lastExecuteTime = System.currentTimeMillis();
         reStart();
     }
@@ -47,15 +44,15 @@ public class BattleLoop implements Runnable {
         }
     }
 
-    public BaseBattle get(long battleId) {
+    public BaseBattle get(Integer battleId) {
         return battleMap.get(battleId);
     }
 
-    public void put(long battleId, BaseBattle battle) {
-        battleMap.put(battleId, battle);
+    public void put(BaseBattle battle) {
+        battleMap.put(battle.battleId, battle);
     }
 
-    public BaseBattle remove(long battleId) {
+    public BaseBattle remove(Integer battleId) {
         return battleMap.remove(battleId);
     }
 
@@ -68,9 +65,6 @@ public class BattleLoop implements Runnable {
             }
             try {
                 long startTime = System.currentTimeMillis();
-                //队列任务执行
-                queue.update(startTime);
-
                 //执行战斗
                 battleMap.values().forEach(battle -> {
                     try {

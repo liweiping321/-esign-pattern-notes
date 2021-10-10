@@ -11,14 +11,28 @@ public class DelayedTask implements Runnable, Comparable<DelayedTask> {
     /**
      * 执行时间
      */
-    public final long executeTime;
+    public  long executeTime;
     /**
      * 序列
      */
     private final int sequence;
+    /**
+     * 任务执行结束时间
+     */
+    public final long taskEndTime;
+    /**
+     * 任务执行周期
+     */
+    public final long period;
 
     public DelayedTask(long executeTime, Runnable action) {
+        this(executeTime, executeTime, 0, action);
+    }
+
+    public DelayedTask(long executeTime, long taskEndTime, long period, Runnable action) {
         this.executeTime = executeTime;
+        this.taskEndTime = taskEndTime;
+        this.period = period;
         this.sequence = SEQUENCE.incrementAndGet();
         this.action = action;
     }
